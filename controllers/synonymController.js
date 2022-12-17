@@ -49,10 +49,6 @@ const getSynonym = ((req, res) => {
 
   const synonym = synonymsData.get(word);
   if (synonym) {
-    synonym.forEach((el) => {
-      console.log(`The synonym for word ${word} is ${el}`);
-    });
-
     res.json({
       synonyms: Array.from(synonym),
     });
