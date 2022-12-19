@@ -1,8 +1,17 @@
 const synonymsData = new Map();
 
+const MAX_WORD_LENGTH = 35;
+const isWordValid = (word) => word && /^[a-zA-Z ]+$/.test(word) && word.length < MAX_WORD_LENGTH;
+
 const postSynonym = ((req, res) => {
   const { word, newSynonym } = req.body;
-
+  // If the words are not valid return bad request
+  if (!isWordValid(word) || !isWordValid(newSynonym)) {
+    res.status(400).json({
+      message: 'Not valid words!',
+    });
+    return;
+  }
   // Is there already a synonym for this word
   const existingWordSynonyms = synonymsData.get(word);
 
