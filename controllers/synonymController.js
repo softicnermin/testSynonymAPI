@@ -1,7 +1,28 @@
+const wordsDictionary = new Map();
 const synonymsData = new Map();
 
 const MAX_WORD_LENGTH = 35;
 const isWordValid = (word) => word && /^[a-zA-Z ]+$/.test(word) && word.length < MAX_WORD_LENGTH;
+/*
+  Storage
+  wordsDictionary is a Map where the word is the key and
+  the value is the key in the synonymsData Map
+  The value in the synonymData is a set of synonyms.
+
+  wordsDictionary:
+  {
+    w1: 1,
+    w2: 1,
+    w3: 1,
+    w4: 2,
+    w5: 2,
+  }
+  synonymsData:
+  {
+    1: Set(3) { w1, w2, w3}
+    2: Set(2) { w4, w5 }
+  }
+ */
 
 const postSynonym = ((req, res) => {
   const { word, newSynonym } = req.body;
@@ -12,8 +33,10 @@ const postSynonym = ((req, res) => {
     });
     return;
   }
+
   // Is there already a synonym for this word
-  const existingWordSynonyms = synonymsData.get(word);
+  const key = wordsDictionary.get(word);
+  const existingWordSynonyms = synonymsData.get(key);
 
   if (existingWordSynonyms && existingWordSynonyms.has(newSynonym)) {
     res.json({
@@ -22,44 +45,41 @@ const postSynonym = ((req, res) => {
   } else if (existingWordSynonyms) {
     // If it's an existing word add the new
     // synonym if not already present
-
-    // 1. Add the entry for the newSynony word
-    // It consists of the existing synonyms for the lookup word and that word itself
-    const newEntrySynyms = new Set(existingWordSynonyms);
-    newEntrySynyms.add(word);
-    synonymsData.set(newSynonym, newEntrySynyms);
-
-    // Add this synonym to the other synonyms due to transitive rule
-    // If "B" is a synonym to "A" and "C" a synonym to "B", then "C" should automatically,
-    // by transitive rule, also be the synonym for "A".
-    existingWordSynonyms.forEach((el) => {
-      const otherSyonyms = synonymsData.get(el);
-      otherSyonyms.add(newSynonym);
-    });
-
-    // add it to this word as well
     existingWordSynonyms.add(newSynonym);
+    wordsDictionary.set(newSynonym, key);
 
     res.json({
       message: 'Success!',
     });
   } else {
-    // First entry
-    synonymsData.set(word, new Set([newSynonym]));
-    synonymsData.set(newSynonym, new Set([word]));
+    // New entry
+    const newKey = synonymsData.size + 1;
+    synonymsData.set(newKey, new Set([word, newSynonym]));
+    // Add both wordsDictionary with the link to the synonym set
+    wordsDictionary.set(word, newKey);
+    wordsDictionary.set(newSynonym, newKey);
     res.json({
       message: 'Success!',
     });
   }
 });
 
+/*
+Getting the synonym list for a word is requires two
+  operations
+  1. Get the key from the wordsDictionary O(1)
+  2. Get the synonym from synonymsData O(1)
+ */
 const getSynonym = ((req, res) => {
   const { word } = req.params;
 
-  const synonym = synonymsData.get(word);
-  if (synonym) {
+  const key = wordsDictionary.get(word);
+  // Make a copy and delete the searched word from the response
+  const synonyms = new Set(synonymsData.get(key));
+  synonyms.delete(word);
+  if (synonyms) {
     res.json({
-      synonyms: Array.from(synonym),
+      synonyms: Array.from(synonyms),
     });
   } else {
     res.json({
