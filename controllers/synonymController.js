@@ -27,9 +27,12 @@ const isWordValid = (word) => word && /^[a-zA-Z ]+$/.test(word) && word.length <
 const postSynonym = ((req, res) => {
   const { word, newSynonym } = req.body;
   // If the words are not valid return bad request
-  if (!isWordValid(word) || !isWordValid(newSynonym)) {
+  if (!isWordValid(word)
+      || !isWordValid(newSynonym)
+      || word === newSynonym
+  ) {
     res.status(400).json({
-      message: 'Not valid words!',
+      message: 'Not valid entry!',
     });
     return;
   }
