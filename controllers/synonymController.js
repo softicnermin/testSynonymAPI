@@ -61,6 +61,7 @@ const postSynonym = ((req, res) => {
   // Now they are declared synonyms, so we need to merge the synonym list
   // Example for the list in the description would be to
   // declare any word from the group 1 a synonym with any of the words from group 2
+  // e.g (w3 - w5)
   if (firstWordKey && secondWordKey && firstWordKey !== secondWordKey) {
     const mergedKey = synonymsData.size + 1;
     // 1.New merged list
@@ -77,7 +78,7 @@ const postSynonym = ((req, res) => {
     });
     return;
   }
-  // CASE III - Only first word exists
+  // CASE III - Only first word exists (w3 - w6)
   if (firstWordKey && !secondWordKey) {
     // If it's an existing word add the new
     // synonym if not already present
@@ -89,7 +90,7 @@ const postSynonym = ((req, res) => {
     });
     return;
   }
-  // CASE IV - Only second word exists
+  // CASE IV - Only second word exists (w6 - w3)
   if (secondWordKey && !firstWordKey) {
     // If it's an existing word add the new
     // synonym if not already present
@@ -101,7 +102,7 @@ const postSynonym = ((req, res) => {
     });
     return;
   }
-  // CASE V - First time for new words
+  // CASE V - First time for new words (w6 - w7)
   const newKey = uuidv4();
   synonymsData.set(newKey, new Set([firstWord, secondWord]));
   // Add both wordsDictionary with the link to the synonym set
