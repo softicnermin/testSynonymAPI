@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js",
+    "start-dev": "nodemon -r dotenv/config index.js",
+    "start": "node -r dotenv/config index.js",
     "lint": "eslint",
     "test": "mocha tests/**/*test.js"
   },
@@ -15,6 +15,7 @@
   "dependencies": {
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "nodemon": "^2.0.20",
     "uuid": "^9.0.0"
@@ -34,8 +35,7 @@
     ],
     "delay": 2500,
     "env": {
-      "NODE_ENV": "development",
-      "PORT": 3000
+      "NODE_ENV": "development"
     }
   }
 }

@@ -9,6 +9,10 @@ Welcome to the Synonyms API
 npm start
 ```
 
+* Start application with nodemon
+```
+npm run start-dev
+```
 
 * Run tests with mocha
 ```
