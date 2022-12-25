@@ -4,7 +4,8 @@ Welcome to the Synonyms API
 
 
 ### Usage
-* Start application
+* Start application on default port
+* Change port in .env file if necessary
 ```
 npm start
 ```
@@ -14,7 +15,7 @@ npm start
 npm run start-dev
 ```
 
-* Run tests with mocha
+* Run tests with mocha & instanbul
 ```
-npm test
+npm run test
 ```
