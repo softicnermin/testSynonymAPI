@@ -8,7 +8,18 @@ const server = require('../index');
 
 chai.use(chaiHttp);
 describe('Synonym Controller Test', () => {
-  describe('Post', () => {
+  describe('Get', () => {
+    it('should return 200', (done) => {
+      chai.request(server)
+        .get('/')
+        .end((err, res) => {
+          res.should.have.status(200);
+          done();
+        });
+    });
+  });
+
+  describe('Get', () => {
     it('should return empty array', (done) => {
       chai.request(server)
         .get('/api/synonym/test')
@@ -83,7 +94,7 @@ describe('Synonym Controller Test', () => {
   });
 
   describe('Post', () => {
-    it('should return duplicate entry', (done) => {
+    it('should return duplicate entry -  CASE I', (done) => {
       const payload = {
         firstWord: 'plate',
         secondWord: 'saucer',
@@ -102,7 +113,7 @@ describe('Synonym Controller Test', () => {
     });
   });
 
-  describe('Post', () => {
+  describe('Get', () => {
     it('should return synonym entry', (done) => {
       const word = 'plate';
 
@@ -113,6 +124,86 @@ describe('Synonym Controller Test', () => {
           res.body.should.be.a('object');
           res.body.should.have.property('synonyms');
           res.body.synonyms.length.should.be.eql(1);
+          done();
+        });
+    });
+  });
+
+  describe('Post', () => {
+    it('should return success - cover CASE III', (done) => {
+      const payload = {
+        firstWord: 'plate',
+        secondWord: 'bowl',
+      };
+
+      chai.request(server)
+        .post('/api/synonym')
+        .send(payload)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.have.property('message');
+          res.body.message.should.be.eql('Success!');
+          done();
+        });
+    });
+  });
+
+  describe('Post', () => {
+    it('should return success - cover CASE IV', (done) => {
+      const payload = {
+        firstWord: 'dish',
+        secondWord: 'plate',
+      };
+
+      chai.request(server)
+        .post('/api/synonym')
+        .send(payload)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.have.property('message');
+          res.body.message.should.be.eql('Success!');
+          done();
+        });
+    });
+  });
+
+  describe('Post', () => {
+    it('should return success', (done) => {
+      const payload = {
+        firstWord: 'platter',
+        secondWord: 'paten',
+      };
+
+      chai.request(server)
+        .post('/api/synonym')
+        .send(payload)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.have.property('message');
+          res.body.message.should.be.eql('Success!');
+          done();
+        });
+    });
+  });
+
+  describe('Post', () => {
+    it('should return success - cover CASE II', (done) => {
+      const payload = {
+        firstWord: 'plate',
+        secondWord: 'paten',
+      };
+
+      chai.request(server)
+        .post('/api/synonym')
+        .send(payload)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a('object');
+          res.body.should.have.property('message');
+          res.body.message.should.be.eql('Success!');
           done();
         });
     });

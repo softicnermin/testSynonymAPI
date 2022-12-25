@@ -123,10 +123,10 @@ const getSynonym = ((req, res) => {
   const { word } = req.params;
 
   const key = wordsDictionary.get(word);
-  // Make a copy and delete the searched word from the response
-  const synonyms = new Set(synonymsData.get(key));
-  synonyms.delete(word);
-  if (synonyms) {
+  if (key) {
+    // Make a copy and delete the searched word from the response
+    const synonyms = new Set(synonymsData.get(key));
+    synonyms.delete(word);
     res.json({
       synonyms: Array.from(synonyms),
     });

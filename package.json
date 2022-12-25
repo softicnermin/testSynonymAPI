@@ -7,7 +7,7 @@
     "start-dev": "nodemon -r dotenv/config index.js",
     "start": "node -r dotenv/config index.js",
     "lint": "eslint",
-    "test": "mocha tests/**/*test.js"
+    "test": "nyc mocha tests/**/*test.js"
   },
   "keywords": [],
   "author": "",
@@ -26,7 +26,8 @@
     "eslint": "^8.29.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.26.0",
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "nyc": "^15.1.0"
   },
   "nodemonConfig": {
     "restartable": true,
